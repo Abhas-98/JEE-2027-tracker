@@ -21,7 +21,7 @@ BOT_TOKEN = os.environ.get('BOT_TOKEN')
 bot = telebot.TeleBot(BOT_TOKEN)
 
 # 🔴 CRUCIAL: Put your specific negative JEE 2027 Group ID number below!
-GROUP_CHAT_ID =@JEE_PYRAMIDS
+GROUP_CHAT_ID ='@JEE_PYRAMIDS'
 
 def get_countdown_text():
     today = datetime.now()
