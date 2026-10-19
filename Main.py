@@ -10,7 +10,7 @@ app = Flask('')
 
 @app.route('/')
 def home():
-    return "JEE 2027 Bot is running online 24/7!"
+    return "Bot is running online 24/7!"
 
 def run_dummy_server():
     port = int(os.environ.get("PORT", 8080))
@@ -20,12 +20,12 @@ def run_dummy_server():
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 bot = telebot.TeleBot(BOT_TOKEN)
 
-# 🔴 Locked into your group username with clean single quotes!
-GROUP_CHAT_ID = '@JEE_PYRAMIDS'
+# 🔴 CRUCIAL: Put your exact negative group ID number inside the single quotes below!
+GROUP_CHAT_ID = '-1002968640335'
 
 def get_countdown_text():
     today = datetime.now()
-    target = datetime(2027, 1, 20) # 🎯 Target Exam Date: 20th January 2027
+    target = datetime(2027, 1, 20) # Target Exam Date: 20th January 2028
     
     difference = target - today
     days_left = difference.days
@@ -35,12 +35,12 @@ def get_countdown_text():
     today_str = today.strftime("%dth %B, %Y")
     
     return (
-        "⏳ JEE Main 2027 Countdown ⏳\n\n"
+        "⏳ JEE Main 2027 Countdown\n\n"
         f"📅 Today: {today_str}\n"
         "🎯 Estimated Target: 20th January 2027\n"
         f"⏳ Days Left: {days_left}\n"
         f"📅 Weeks Left: {weeks_left} weeks + {extra_days} days\n\n"
-        "Keep going. Every day counts! 🔥"
+        "Keep going. 🔥"
     )
 
 @bot.message_handler(commands=['start'])
@@ -49,7 +49,6 @@ def send_welcome(message):
         "Your daily dose of motivation and reality check for JEE Main 2027.\n\n"
         "📖 Available Commands:\n"
         "• /countdown - Get the live dynamic exam timer\n"
-        "• /syllabus - View full course summary overview\n"
         "• /physics - View Class 11 & 12 Physics syllabus\n"
         "• /chemistry - View Class 11 & 12 Chemistry syllabus\n"
         "• /maths - View Class 11 & 12 Mathematics syllabus\n\n"
@@ -63,23 +62,11 @@ def send_countdown(message):
     response = get_countdown_text()
     bot.send_message(message.chat.id, response)
 
-# --- COMPLETE SYLLABUS COMMAND ---
-@bot.message_handler(func=lambda msg: msg.text is not None and msg.text.startswith('/syllabus'))
-def send_syllabus(message):
-    syllabus_text = (
-        "📚 **Syllabus for JEE Mains + Advanced** 📚\n\n"
-        "💡 *Use the individual subject commands (/physics, /chemistry, /maths) to see the full chapter lists clearly!*\n\n"
-        "🔴 **PHYSICS:** Tracks Core Mechanics, Electrodynamics, Thermodynamics, SHM, Optics & Modern Physics.\n\n"
-        "🟢 **CHEMISTRY:** Tracks Mole Concept, GOC, Organic Compounds, Periodic Table & Coordination Chemistry.\n\n"
-        "🔵 **MATHEMATICS:** Tracks Coordinate Geometry, Algebra, Vectors/3D, Calculus & Trigonometry."
-    )
-    bot.send_message(message.chat.id, syllabus_text)
-
-# --- PHYSICS COMMAND ---
+# --- NEW: PHYSICS COMMAND ---
 @bot.message_handler(func=lambda msg: msg.text is not None and msg.text.startswith('/physics'))
 def send_physics(message):
     physics_text = (
-        "📚 **Physics Syllabus (JEE 2027)** 📚\n\n"
+        "📚 **Syllabus for JEE Physics (Mains + Advanced)** 📚\n\n"
         "📌 **Class 11:**\n"
         "• Physical World & Measurement\n"
         "• Kinematics & Laws of Motion\n"
@@ -100,11 +87,11 @@ def send_physics(message):
     )
     bot.send_message(message.chat.id, physics_text)
 
-# --- CHEMISTRY COMMAND ---
+# --- NEW: CHEMISTRY COMMAND ---
 @bot.message_handler(func=lambda msg: msg.text is not None and msg.text.startswith('/chemistry'))
 def send_chemistry(message):
     chemistry_text = (
-        "📚 **Chemistry Syllabus (JEE 2027)** 📚\n\n"
+        "📚 **Syllabus for JEE Chemistry (Mains + Advanced)** 📚\n\n"
         "📌 **Class 11:**\n"
         "• Some Basic Concepts (Mole Concept)\n"
         "• Structure of Atom\n"
@@ -113,7 +100,7 @@ def send_chemistry(message):
         "• Chemical Thermodynamics\n"
         "• Equilibrium (Chemical & Ionic)\n"
         "• Redox Reactions\n"
-        "• Organic Chemistry: Basic Principles (GOC)\n"
+        "• Organic Chemistry: Basic Principles & Techniques (GOC)\n"
         "• Hydrocarbons\n\n"
         "📌 **Class 12:**\n"
         "• Solutions\n"
@@ -129,11 +116,11 @@ def send_chemistry(message):
     )
     bot.send_message(message.chat.id, chemistry_text)
 
-# --- MATHEMATICS COMMAND ---
+# --- NEW: MATHEMATICS COMMAND ---
 @bot.message_handler(func=lambda msg: msg.text is not None and msg.text.startswith('/maths'))
 def send_maths(message):
     maths_text = (
-        "📚 **Mathematics Syllabus (JEE 2027)** 📚\n\n"
+        "📚 **Syllabus for JEE Mathematics (Mains + Advanced)** 📚\n\n"
         "📌 **Class 11:**\n"
         "• Sets, Relations & Functions\n"
         "• Trigonometric Functions\n"
@@ -152,7 +139,7 @@ def send_maths(message):
         "• Applications of Integrals (Area)\n"
         "• Differential Equations\n"
         "• Vector Algebra\n"
-        " Three Dimensional Geometry (3D)\n"
+        "• Three Dimensional Geometry (3D)\n"
         "• Probability"
     )
     bot.send_message(message.chat.id, maths_text)
@@ -162,16 +149,23 @@ def automatic_scheduler():
     while True:
         # 7:00 AM IST is exactly 1:30 AM UTC time on Render
         current_time = datetime.utcnow()
+        
         if current_time.hour == 1 and current_time.minute == 30:
-            try:
-                response = get_countdown_text()
-                bot.send_message(chat_id=GROUP_CHAT_ID, text=f"📢 **DAILY MORNING CHECK-IN (JEE 2027)**\n\n{response}")
-            except Exception as e:
-                print("Error sending automatic message:", e)
+            if GROUP_CHAT_ID != '-1002968640335':
+                try:
+                    response = get_countdown_text()
+                    bot.send_message(chat_id=int(GROUP_CHAT_ID), text=f"📢 DAILY MORNING ALERTS\n\n{response}")
+                except Exception as e:
+                    print("Error sending automatic message:", e)
             time.sleep(60)
         time.sleep(10)
 
+# --- START EVERYTHING SAFELY ---
 if __name__ == "__main__":
-    threading.Thread(target=run_dummy_server, daemon=True).start()
-    threading.Thread(target=automatic_scheduler, daemon=True).start()
+    t1 = threading.Thread(target=run_dummy_server, daemon=True)
+    t1.start()
+    
+    t2 = threading.Thread(target=automatic_scheduler, daemon=True)
+    t2.start()
+    
     bot.infinity_polling()
